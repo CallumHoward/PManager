@@ -21,6 +21,7 @@ public:
     void setup();
     void update();
     PManager& addParameter(const std::string& name, float* value);
+    PManager& addParameter(const std::string& name, float* value, float min, float max);
 
 private:
     static const bool sHiDpi = true;
@@ -98,6 +99,13 @@ void PManager::update() {
 
 PManager& PManager::addParameter(const std::string& name, float* valueAddress) {
     mParams.push_back(static_cast<PVar>(new ParameterFloat{name, valueAddress}));
+    return *this;
+}
+
+PManager &PManager::addParameter(
+        const std::string &name, float *valueAddress, float min, float max) {
+    mParams.push_back(
+            static_cast<PVar>(new ParameterFloat{name, valueAddress, min, max}));
     return *this;
 }
 

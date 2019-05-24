@@ -9,6 +9,10 @@ struct Parameter {
 struct ParameterFloat : public Parameter {
     ParameterFloat(std::string name, float* valueAddress) :
             Parameter{name}, valuePointer{valueAddress} {}
+    ParameterFloat(std::string name, float *valueAddress, float min, float max) :
+            Parameter{name}, valuePointer{valueAddress}, pMin{min}, pMax{max},
+            min{min}, max{max} {}
+
     float* valuePointer;
     float min = 0.0f;  // artificial for range trimming
     float max = 1.0f;
