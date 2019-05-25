@@ -8,6 +8,7 @@
 #include <string>
 
 #include "cinder/app/App.h"
+#include "cinder/CinderMath.h"          // constrain, lmap
 
 #include "Parameter.hpp"
 
@@ -20,6 +21,12 @@ class PManager {
 public:
     void setup();
     void update();
+
+    void setSelected(int targetIndex) {
+        const auto max = static_cast<int>(mParams.size()) - 1;
+        mSelected = constrain(targetIndex, 0, max);
+    }
+
     PManager& addParameter(const std::string& name, float* value);
     PManager& addParameter(const std::string& name, float* value, float min, float max);
 
@@ -27,6 +34,9 @@ private:
     static const bool sHiDpi = true;
     ImFont* font1;
     float mNum = 0.0;
+
+    int mSelected = 0;
+
     using PVar = Parameter*;
     std::vector<PVar> mParams;
 };
@@ -73,10 +83,8 @@ void PManager::update() {
     ui::SetNextWindowSize(getWindowSize() * (sHiDpi ? 2 : 1));
     ui::ScopedWindow window{"Parameter Manager", ImGuiWindowFlags_NoTitleBar};
 
-    static int selected = 0;
-
     if (not mParams.empty()) {
-        auto p = static_cast<ParameterFloat*>(mParams.at(selected));
+        auto p = static_cast<ParameterFloat*>(mParams.at(mSelected));
         // slider
         ui::SliderFloat("Number", p->valuePointer, p->pMin, p->pMax);
         ui::RangeSliderFloat("Range", &p->min, &p->max, p->pMin, p->pMax);
@@ -90,7 +98,7 @@ void PManager::update() {
     for (auto& param : mParams) {
         auto p = static_cast<ParameterFloat*>(param);
         auto id = "##" + std::to_string(i);  // after ## is not visible
-        ui::RadioButton(id.c_str(), &selected, i);
+        ui::RadioButton(id.c_str(), &mSelected, i);
         ui::SameLine();
         ui::SliderFloat(p->name.c_str(), p->valuePointer, p->min, p->max);
         ++i;
