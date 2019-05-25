@@ -23,6 +23,7 @@
 		908EB84A22988B3600CC94D2 /* imgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 075766BE5E90488BACC4CFE4 /* imgui.cpp */; };
 		908EB84B22988B3600CC94D2 /* imgui_draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 088A98E2938D4BD692FE2F85 /* imgui_draw.cpp */; };
 		908EB84C22988B3600CC94D2 /* imgui_demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4706958D92F8442AA4F82C7D /* imgui_demo.cpp */; };
+		908EB84F229896B100CC94D2 /* CommsManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 908EB84D229896B100CC94D2 /* CommsManager.cpp */; };
 		92E9C697906947048BFCD6DD /* PManagerApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EBE7B68B5D104A7687274D19 /* PManagerApp.cpp */; };
 		9438A8A6F0F34912A6039ED8 /* Osc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C579BD099674AAABE0EF3F2 /* Osc.cpp */; };
 /* End PBXBuildFile section */
@@ -53,6 +54,8 @@
 		890B203F72D14BDDAF61BE72 /* CinderImGui.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CinderImGui.cpp; path = ../blocks/ImGui/src/CinderImGui.cpp; sourceTree = "<group>"; };
 		8C579BD099674AAABE0EF3F2 /* Osc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = Osc.cpp; path = ../blocks/OSC/src/cinder/osc/Osc.cpp; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* PManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		908EB84D229896B100CC94D2 /* CommsManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CommsManager.cpp; path = ../src/CommsManager.cpp; sourceTree = "<group>"; };
+		908EB84E229896B100CC94D2 /* CommsManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CommsManager.hpp; path = ../src/CommsManager.hpp; sourceTree = "<group>"; };
 		90E17336227EBD4B00294194 /* PManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PManager.hpp; path = ../src/PManager.hpp; sourceTree = "<group>"; };
 		90E8AA53227D4E460069554F /* Parameter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Parameter.hpp; path = ../src/Parameter.hpp; sourceTree = "<group>"; };
 		9EC58B73E3AA4743B5491ED3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -95,6 +98,8 @@
 		080E96DDFE201D6D7F000001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				908EB84D229896B100CC94D2 /* CommsManager.cpp */,
+				908EB84E229896B100CC94D2 /* CommsManager.hpp */,
 				90E17336227EBD4B00294194 /* PManager.hpp */,
 				90E8AA53227D4E460069554F /* Parameter.hpp */,
 				EBE7B68B5D104A7687274D19 /* PManagerApp.cpp */,
@@ -323,6 +328,7 @@
 			files = (
 				92E9C697906947048BFCD6DD /* PManagerApp.cpp in Sources */,
 				9438A8A6F0F34912A6039ED8 /* Osc.cpp in Sources */,
+				908EB84F229896B100CC94D2 /* CommsManager.cpp in Sources */,
 				908EB84922988B1900CC94D2 /* CinderImGui.cpp in Sources */,
 				908EB84A22988B3600CC94D2 /* imgui.cpp in Sources */,
 				908EB84B22988B3600CC94D2 /* imgui_draw.cpp in Sources */,
