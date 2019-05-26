@@ -27,12 +27,21 @@ public:
     }
 
 private:
+    struct Mapping {
+        int* readVal;
+        Anim<float>* target;
+    };
+
+    std::unordered_map<std::string, Mapping> mParamMap;
+
+    ch::CommsManager mCommsManager;
+    std::unordered_map<int, int> mMidiBank;
+    std::unordered_map<int, int> mMidiSeq;
+
     ch::PManager mPManager;
     std::vector<float> mPValues;
 
-    ch::CommsManager mCommsManager;
-    std::unordered_map<int, int> mParamMappings;
-
+    std::vector<EaseFn> mAnimLookup = std::vector<EaseFn>{EaseInQuad()};
     Anim<float> mCircleRadius = 25.0f;
     Anim<vec2> mCircleOffset = vec2{0, 0};
 };
@@ -54,34 +63,55 @@ void PManagerApp::setup() {
 
     // OSC
     mCommsManager.setup("/midi/midi_fighter_twister/0/1/control_change",
-            [this] (int index, int value) { mParamMappings[index] = value; });
+            [this] (int index, int value) { mMidiBank[index] = value; });
 
     mCommsManager.addListener("/midi/midi_fighter_twister/0/8/control_change",
-            [this] (int index, int value) { mParamMappings[index] = value; });
+            [this] (int index, int value) { mMidiSeq[index] = value; });
 
-    mParamMappings[0] = 0;
-    mParamMappings[1] = 0;
-    mParamMappings[2] = 0;
-    mParamMappings[3] = 0;
-    mParamMappings[0x0a] = 0x0;
+    mMidiBank[0] = 0;
+    mMidiBank[1] = 0;
+    mMidiBank[2] = 0;
+    mMidiBank[3] = 0;
+
+    mMidiSeq[0x0a] = 0x0;
+    mParamMap["Circle.Radius"] = Mapping{&mMidiSeq[0x0a], &mCircleRadius};
+
+    static Anim<float> sCircleAnimDuration = 0.1;
+    mParamMap["Circle.Radius.Anim.Duration"] = Mapping{nullptr, &sCircleAnimDuration};
+
+    static Anim<float> sCircleRadiusAnimIn = 0;
+    mParamMap["Circle.Radius.Anim.In"] = Mapping{nullptr, &sCircleRadiusAnimIn};
+
+    static Anim<float> sCircleRadiusAnimOut = 0;
+    mParamMap["Circle.Radius.Anim.Out"] = Mapping{nullptr, &sCircleRadiusAnimOut};
 }
 
 void PManagerApp::update() {
     mPManager.update();
-    mPManager.setSelected(lmap(mParamMappings[0], 0, 127, 0, 12));
-    mCircleRadius = lmap(mParamMappings[1], 0, 127, 1, 100);
-    mCircleOffset.ptr()->x = lmap(mParamMappings[2], 0, 127,
+    mPManager.setSelected(lmap(mMidiBank[0], 0, 127, 0, 12));
+    mCircleRadius = lmap(mMidiBank[1], 0, 127, 1, 100);
+    mCircleOffset.ptr()->x = lmap(mMidiBank[2], 0, 127,
             -getWindowWidth() / 2, getWindowWidth() / 2);
-    mCircleOffset.ptr()->y = lmap(mParamMappings[3], 0, 127,
+    mCircleOffset.ptr()->y = lmap(mMidiBank[3], 0, 127,
             -getWindowHeight() / 2, getWindowHeight() / 2);
 
-    CI_LOG_I(mParamMappings[0x0a]);
+    const auto p = mParamMap["Circle.Radius"];
+    if (*p.readVal != 0x0) {
+        const auto radius = p.target->value();
 
-    if (mParamMappings[0x0a] != 0x0) {
-        const auto radius = mCircleRadius.value();
-        timeline().apply(&mCircleRadius, radius * mParamMappings[0x0a] / 64, 0.1f, EaseInQuad());
-        timeline().appendTo(&mCircleRadius, radius, 0.1f, EaseInQuad());
-        mParamMappings[0x0a] = 0x0;
+        const auto q = mParamMap["Circle.Radius.Anim.Duration"];
+        const auto duration = q.target->value();
+
+        const auto r = mParamMap["Circle.Radius.Anim.In"];
+        const auto animIn = mAnimLookup[r.target->value()];
+
+        const auto s = mParamMap["Circle.Radius.Anim.Out"];
+        const auto animOut = mAnimLookup[s.target->value()];
+
+        timeline().apply(p.target, radius * (*p.readVal) / 64, duration, animIn);
+        timeline().appendTo(p.target, radius, duration, animOut);
+
+        *p.readVal = 0x0;  // reset impulse
     }
 }
 

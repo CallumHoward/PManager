@@ -55,18 +55,18 @@ void CommsManager::setup(const std::string& listenPath,
     // Udp doesn't "connect" the same way Tcp does. If bind doesn't throw, we
     // can consider ourselves connected.
     mIsConnected = true;
-
-    mUpdateCallback = updateCallback;
 }
 
 void CommsManager::addListener(const std::string& listenPath,
         const std::function<void(int, int)>& updateCallback) {
 
+    mUpdateCallbacks[listenPath] = updateCallback;
+
     mReceiver.setListener(listenPath,
             [&](const osc::Message &msg) {
                 const auto index = msg[0].int32();
                 const auto value = msg[1].int32();
-                mUpdateCallback(index, value);
+                mUpdateCallbacks.at(msg.getAddress())(index, value);
             });
 }
 
