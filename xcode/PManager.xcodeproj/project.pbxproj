@@ -56,6 +56,7 @@
 		8D1107320486CEB800E47090 /* PManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		908EB84D229896B100CC94D2 /* CommsManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CommsManager.cpp; path = ../src/CommsManager.cpp; sourceTree = "<group>"; };
 		908EB84E229896B100CC94D2 /* CommsManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CommsManager.hpp; path = ../src/CommsManager.hpp; sourceTree = "<group>"; };
+		90DCEAFA22B8FD0F0029031A /* SuperFormula.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SuperFormula.hpp; path = ../src/SuperFormula.hpp; sourceTree = "<group>"; };
 		90E17336227EBD4B00294194 /* PManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = PManager.hpp; path = ../src/PManager.hpp; sourceTree = "<group>"; };
 		90E8AA53227D4E460069554F /* Parameter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Parameter.hpp; path = ../src/Parameter.hpp; sourceTree = "<group>"; };
 		9EC58B73E3AA4743B5491ED3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -98,6 +99,7 @@
 		080E96DDFE201D6D7F000001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				90DCEAFA22B8FD0F0029031A /* SuperFormula.hpp */,
 				908EB84D229896B100CC94D2 /* CommsManager.cpp */,
 				908EB84E229896B100CC94D2 /* CommsManager.hpp */,
 				90E17336227EBD4B00294194 /* PManager.hpp */,

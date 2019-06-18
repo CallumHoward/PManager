@@ -13,6 +13,7 @@
 
 #include "CommsManager.hpp"
 #include "PManager.hpp"
+#include "SuperFormula.hpp"
 
 using namespace ci;
 using namespace ci::app;
@@ -44,11 +45,21 @@ private:
     std::vector<EaseFn> mAnimLookup = std::vector<EaseFn>{EaseInQuad()};
     Anim<float> mCircleRadius = 25.0f;
     Anim<vec2> mCircleOffset = vec2{0, 0};
+
+    std::vector<ch::SuperFormula> mSuperFormulas;
 };
 
 void PManagerApp::setup() {
     const auto pNames = std::vector<std::string>{"Foo", "Bar", "Baz", "Fizz", "Buzz", "Zap"};
     mPValues = std::vector<float>(pNames.size(), 0.5f);
+
+    // Super Formula
+
+    for (size_t i = 0; i < 2; ++i) {
+        mSuperFormulas.push_back(ch::SuperFormula{});
+        mSuperFormulas[i].setup();
+        mSuperFormulas[i].mScaleFactor = 50.0f / (static_cast<float>(i) + 1.0f);
+    }
 
     mPManager.setup();
     for (size_t i = 0; i < pNames.size(); ++i) {
@@ -60,6 +71,12 @@ void PManagerApp::setup() {
             -getWindowWidth() / 2, getWindowWidth() / 2);
     mPManager.addParameter("Circle Offset Y", &(mCircleOffset.ptr()->y),
             -getWindowHeight() / 2, getWindowHeight() / 2);
+    mPManager.addParameter("SuperFormula a", &mSuperFormulas[0].a, 0.0f, 5.0f);
+    mPManager.addParameter("SuperFormula b", &mSuperFormulas[0].b, 0.0f, 5.0f);
+    mPManager.addParameter("SuperFormula m", &mSuperFormulas[0].m, 0.0f, 100.0f);
+    mPManager.addParameter("SuperFormula n1", &mSuperFormulas[0].n1, 0.0f, 2.0f);
+    mPManager.addParameter("SuperFormula n2", &mSuperFormulas[0].n2, 0.0f, 2.0f);
+    mPManager.addParameter("SuperFormula n3", &mSuperFormulas[0].n3, 0.0f, 2.0f);
 
     // OSC
     mCommsManager.setup("/midi/midi_fighter_twister/0/1/control_change",
@@ -72,6 +89,12 @@ void PManagerApp::setup() {
     mMidiBank[1] = 0;
     mMidiBank[2] = 0;
     mMidiBank[3] = 0;
+    mMidiBank[4] = 127;
+    mMidiBank[5] = 127;
+    mMidiBank[6] = 127;
+    mMidiBank[7] = 127;
+    mMidiBank[8] = 127;
+    mMidiBank[9] = 127;
 
     mMidiSeq[0x0a] = 0x0;
     mParamMap["Circle.Radius"] = Mapping{&mMidiSeq[0x0a], &mCircleRadius};
@@ -94,6 +117,16 @@ void PManagerApp::update() {
             -getWindowWidth() / 2, getWindowWidth() / 2);
     mCircleOffset.ptr()->y = lmap(mMidiBank[3], 0, 127,
             -getWindowHeight() / 2, getWindowHeight() / 2);
+
+    // Super Formula
+    for (size_t i = 0; i < mSuperFormulas.size(); ++i) {
+        mSuperFormulas[i].a = lmap(static_cast<float>(mMidiBank[4]), 0.0f, 127.0f, 0.0f, 5.0f);
+        mSuperFormulas[i].b = lmap(static_cast<float>(mMidiBank[5]), 0.0f, 127.0f, 0.0f, 5.0f);
+        mSuperFormulas[i].m = lmap(static_cast<float>(mMidiBank[6]), 0.0f, 127.0f, 0.0f, 100.0f);
+        mSuperFormulas[i].n1 = lmap(static_cast<float>(mMidiBank[7]), 0.0f, 127.0f, 0.0f, 2.0f);
+        mSuperFormulas[i].n2 = lmap(static_cast<float>(mMidiBank[8]), 0.0f, 127.0f, 0.0f, 2.0f);
+        mSuperFormulas[i].n3 = lmap(static_cast<float>(mMidiBank[9]), 0.0f, 127.0f, 0.0f, 2.0f);
+    }
 
     const auto p = mParamMap["Circle.Radius"];
     if (*p.readVal != 0x0) {
@@ -118,7 +151,11 @@ void PManagerApp::update() {
 void PManagerApp::draw() {
     gl::clear(Color(0, 0, 0));
 
-    gl::drawSolidCircle(getWindowCenter() + mCircleOffset.value(), mCircleRadius);
+    // Super Formula
+    gl::color(1, 1, 1);
+    for (auto& superFormula : mSuperFormulas) { superFormula.draw(); }
+
+    //gl::drawSolidCircle(getWindowCenter() + mCircleOffset.value(), mCircleRadius);
 }
 
 CINDER_APP(PManagerApp, RendererGl, PManagerApp::prepareSettings)

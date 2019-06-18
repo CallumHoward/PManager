@@ -80,7 +80,7 @@ void PManager::setup() {
 
 void PManager::update() {
     ui::SetNextWindowPos(ivec2{0, 0});
-    ui::SetNextWindowSize(getWindowSize() * (sHiDpi ? 2 : 1));
+    //ui::SetNextWindowSize(getWindowSize() * (sHiDpi ? 2 : 1));
     ui::ScopedWindow window{"Parameter Manager", ImGuiWindowFlags_NoTitleBar};
 
     if (not mParams.empty()) {
